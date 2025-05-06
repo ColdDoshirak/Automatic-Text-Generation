@@ -95,7 +95,7 @@ public class ConfigurationService
 
             jsonObj["ApiSettings"]["BaseUrl"] = newUrl;
 
-            string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
+            var output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
             File.WriteAllText(_configPath, output);
 
             LoadConfiguration();

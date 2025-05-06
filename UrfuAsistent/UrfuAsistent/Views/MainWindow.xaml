@@ -34,7 +34,7 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Center" FontSize="18">Ассистент УрФУ</TextBlock>
-                    <Image Source="/Assets/UrFULogo.png" Width="32" Height="32" VerticalAlignment="Center" 
+                    <Image Source="/Assets/UrFULogo.png" Width="32" Height="32" VerticalAlignment="Center"
                            RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Grid>
             </materialDesign:ColorZone>
@@ -45,128 +45,85 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <TabControl materialDesign:ColorZoneAssist.Mode="PrimaryLight">
-                    <!-- Tab 1: Standard API Tab -->
-                    <TabItem Header="API Chat">
-                        <materialDesign:Card Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                <TextBlock Text="{Binding Response}" TextWrapping="Wrap" FontSize="16" />
-                            </ScrollViewer>
-                        </materialDesign:Card>
-                    </TabItem>
-                    
-                    <!-- Tab 2: SSR Tab -->
-                    <TabItem Header="SSR Chat">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            
-                            <WebBrowser x:Name="SsrBrowser" Visibility="{Binding IsSsrLoaded, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                            
-                            <materialDesign:Card Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2" 
-                                                Visibility="{Binding IsSsrLoaded, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-                                <TextBlock Text="SSR content will be displayed here once you send a prompt." 
-                                          TextWrapping="Wrap" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </materialDesign:Card>
-                        </Grid>
-                    </TabItem>
-                    
-                    <!-- Tab 3: Voice Transcription -->
-                    <TabItem Header="Voice Assistant">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            
-                            <!-- Voice controls -->
-                            <materialDesign:Card Padding="16" Margin="0,0,0,16" materialDesign:ShadowAssist.ShadowDepth="Depth1">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    
-                                    <TextBlock Text="Upload an audio file for transcription:" Margin="0,0,0,8"/>
-                                    
-                                    <Grid Grid.Row="1">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        
-                                        <TextBox IsReadOnly="True" Text="{Binding SelectedAudioFile}" 
-                                                materialDesign:HintAssist.Hint="No file selected..."/>
-                                        
-                                        <Button Grid.Column="1" Margin="8,0,0,0" 
-                                               Command="{Binding BrowseAudioFileCommand}"
-                                               Style="{StaticResource MaterialDesignOutlinedButton}">
-                                            Browse
-                                        </Button>
-                                    </Grid>
-                                    
-                                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="16,0,0,0">
-                                        <RadioButton GroupName="TranscriptionMode" Content="Transcribe Only" 
-                                                    IsChecked="{Binding TranscribeOnly}" Margin="0,0,16,0"/>
-                                        <RadioButton GroupName="TranscriptionMode" Content="Transcribe and Respond" 
-                                                    IsChecked="{Binding TranscribeAndRespond}"/>
-                                    </StackPanel>
-                                </Grid>
-                            </materialDesign:Card>
-                            
-                            <!-- Voice transcription/response display -->
-                            <Grid Grid.Row="1">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                
-                                <materialDesign:Card Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth1" Margin="0,0,0,8">
-                                    <StackPanel>
-                                        <TextBlock Text="Transcription:" FontWeight="Bold" Margin="0,0,0,8"/>
-                                        <TextBlock Text="{Binding Transcription}" TextWrapping="Wrap"/>
-                                    </StackPanel>
-                                </materialDesign:Card>
-                                
-                                <materialDesign:Card Grid.Row="1" Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2">
-                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                        <StackPanel>
-                                            <TextBlock Text="Response:" FontWeight="Bold" Margin="0,0,0,8"/>
-                                            <TextBlock Text="{Binding VoiceResponse}" TextWrapping="Wrap"/>
-                                        </StackPanel>
-                                    </ScrollViewer>
-                                </materialDesign:Card>
-                            </Grid>
-                            
-                            <!-- Voice action buttons -->
-                            <Button Grid.Row="2" Command="{Binding ProcessAudioCommand}" 
-                                   Style="{StaticResource MaterialDesignRaisedButton}"
-                                   HorizontalAlignment="Right" Margin="0,8,0,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="VoiceChat" Margin="0,0,8,0"/>
-                                    <TextBlock Text="Process Audio"/>
-                                </StackPanel>
-                            </Button>
-                        </Grid>
-                    </TabItem>
-                </TabControl>
+                <!-- Unified Response Card -->
+                <materialDesign:Card Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2">
+                    <Grid>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                     Visibility="{Binding IsSimpleResponse, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock Text="{Binding Response}" TextWrapping="Wrap" FontSize="16" />
+                        </ScrollViewer>
+
+                        <WebBrowser x:Name="StreamBrowser"
+                                   Visibility="{Binding IsStreamingActive, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </Grid>
+                </materialDesign:Card>
             </Grid>
 
             <!-- Input Area -->
             <Grid Grid.Row="2" Margin="16,0,16,16">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                <materialDesign:Card Padding="8" materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                <!-- Mode Selection Area -->
+                <materialDesign:Card Padding="8" materialDesign:ShadowAssist.ShadowDepth="Depth1" Margin="0,0,0,8">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- API Response Mode Selection -->
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="0">
+                            <RadioButton Content="Стриминг ответа"
+                                       IsChecked="{Binding UseStreaming, Mode=TwoWay}"
+                                       GroupName="ResponseMode"
+                                       Margin="0,0,16,0"/>
+                            <RadioButton Content="Получить ответ сразу"
+                                       IsChecked="{Binding UseImmediateResponse, Mode=TwoWay}"
+                                       GroupName="ResponseMode"/>
+                        </StackPanel>
+
+                        <!-- Voice Controls -->
+                        <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Right">
+                            <ComboBox materialDesign:HintAssist.Hint="Режим голоса"
+                                     SelectedIndex="{Binding VoiceMode}"
+                                     Width="150" Margin="0,0,16,0">
+                                <ComboBoxItem Content="Расшифровать"/>
+                                <ComboBoxItem Content="Ответить сразу"/>
+                            </ComboBox>
+
+                            <Button x:Name="RecordButton" Click="RecordButton_Click"
+                                   Style="{StaticResource MaterialDesignRaisedButton}"
+                                   ToolTip="Записать голосовой ввод"
+                                   Margin="0,0,8,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon x:Name="RecordIcon" Kind="Microphone" Margin="0,0,8,0"/>
+                                    <TextBlock x:Name="RecordButtonText" Text="Голос"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button x:Name="ProcessVoiceButton"
+                                   Command="{Binding ProcessVoiceCommand}"
+                                   Style="{StaticResource MaterialDesignRaisedButton}"
+                                   ToolTip="Обработать записанный голос"
+                                   Visibility="{Binding IsRecordingComplete, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="VoiceChat" Margin="0,0,8,0"/>
+                                    <TextBlock Text="Обработать"/>
+                                </StackPanel>
+                            </Button>
+
+                            <TextBlock x:Name="RecordingStatus" VerticalAlignment="Center"
+                                     Text="" Foreground="Gray" Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </materialDesign:Card>
+
+                <!-- Text Input Area -->
+                <materialDesign:Card Grid.Row="1" Padding="8" materialDesign:ShadowAssist.ShadowDepth="Depth1">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
